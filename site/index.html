@@ -84,7 +84,7 @@
     <div class="container">
         <div id="status" class="status">Verbinden met MQTT...</div>
         <div id="messages" class="messages"></div>
-        <input type="text" id="messageInput" placeholder="Typ commando (led:aan/led:uit/temperatuur)">
+        <input type="text" id="messageInput" placeholder="Type commando (led:on/led:off/temperature/air pressure)" />
         <button onclick="sendMessage()">Versturen</button>
     </div>
 
@@ -105,7 +105,7 @@
         let lastSentMessage = null;
 
         client.on('connect', () => {
-            document.getElementById('status').textContent = "Verbonden met MQTT";
+            document.getElementById('status').textContent = "Connected with MQTT";
             client.subscribe(config.topic);
         });
 
