@@ -1,0 +1,21 @@
+  version: "3.7"
+  services:
+    web:
+      image: nginx
+      container_name: nginx2
+      volumes:
+        - ./site/index.html:/usr/share/nginx/html/index.html
+        - ./site/nginx.conf:/etc/nginx/conf.d/nginx.conf
+        - ./certificates/:/etc/nginx/certs/
+      ports:
+        - "443:443"
+        - "80:80"
+      
+        
+
+
+
+
+        
+  
+       
