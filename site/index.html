@@ -32,13 +32,13 @@
             word-break: break-word;
         }
         .sent {
-            background-color: #DCF8C6; /* Lichtgroen voor eigen berichten */
-            margin-left: auto; /* Rechts uitlijnen */
+            background-color: #DCF8C6; /* Light green for own messages */
+            margin-left: auto; /* Align right */
             text-align: right;
         }
         .received {
-            background-color: #EFEFEF; /* Lichtgrijs voor ESP-antwoorden */
-            margin-right: auto; /* Links uitlijnen */
+            background-color: #EFEFEF; /* Light gray for ESP responses */
+            margin-right: auto; /* Align left */
         }
         .messages {
             display: flex;
@@ -82,10 +82,10 @@
 </head>
 <body>
     <div class="container">
-        <div id="status" class="status">Verbinden met MQTT...</div>
+        <div id="status" class="status">Connecting to MQTT...</div>
         <div id="messages" class="messages"></div>
-        <input type="text" id="messageInput" placeholder="Type commando (led:on/led:off/temperature/air pressure)" />
-        <button onclick="sendMessage()">Versturen</button>
+        <input type="text" id="messageInput" placeholder="Type command (led:on/led:off/temperature/air pressure)" />
+        <button onclick="sendMessage()">Send</button>
     </div>
 
     <script>
@@ -101,7 +101,7 @@
             password: config.password
         });
 
-        // Track het laatste verzonden bericht
+        // Track the last sent message
         let lastSentMessage = null;
 
         client.on('connect', () => {
@@ -109,38 +109,38 @@
             client.subscribe(config.topic);
         });
 
-        // Berichten ontvangen
+        // Receive messages
         client.on('message', (topic, message) => {
             const msg = message.toString();
             
-            // Negeer het bericht als het hetzelfde is als het laatste verzonden bericht
+            // Ignore the message if it's the same as the last sent message
             if (msg !== lastSentMessage) {
-                // Toon alleen ESP-antwoorden (grijs/links)
+                // Only show ESP responses (gray/left)
                 if (msg.startsWith("BOT-1035607: ")) {
                     displayMessage(msg, 'received');
                 }
             }
         });
 
-        // Bericht verzenden
+        // Send message
         function sendMessage() {
             const input = document.getElementById('messageInput');
             const msg = input.value.trim();
             
             if (msg) {
                 const fullMessage = `BOT-1035607: ${msg}`;
-                lastSentMessage = fullMessage; // Onthoud het verzonden bericht
+                lastSentMessage = fullMessage; // Remember the sent message
                 
-                // Toon eigen bericht direct (groen/rechts)
+                // Show own message directly (green/right)
                 displayMessage(fullMessage, 'sent');
                 
-                // Verstuur naar MQTT
+                // Send to MQTT
                 client.publish(config.topic, fullMessage);
                 input.value = '';
             }
         }
 
-        // Bericht weergeven
+        // Display message
         function displayMessage(message, type) {
             const messagesDiv = document.getElementById("messages");
             const messageDiv = document.createElement("div");
@@ -150,7 +150,7 @@
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
-        // Enter-toets ondersteuning
+        // Enter key support
         document.getElementById('messageInput').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') sendMessage();
         });
